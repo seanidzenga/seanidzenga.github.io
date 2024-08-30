@@ -12,8 +12,9 @@ root.render(
   </React.StrictMode>
 );
 
-// adds the bg-base class to the body ensuring we always have a dark background.
-document.body.classList.add("bg-base");
+document.body.classList.add("macchiato"); // sets the default catppuccin flavour but can be swapped dynamically
+document.body.classList.add("bg-base"); // adds the bg-base class to the body ensuring we always have a dark background.
+document.body.classList.add("text-text") // set base text colour to --ctp-text
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
