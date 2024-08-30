@@ -4,7 +4,7 @@ import Hero from './components/Hero';
 function App() {
   return (
     <div className="App">
-      <Hero/>
+      <Hero headline={'Sean Idzenga'}/>
     </div>
   );
 }
