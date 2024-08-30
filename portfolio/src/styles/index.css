@@ -15,3 +15,12 @@ code, .code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+typewriter .blinking-caret{
+  animation: blinking-caret .75s step-end infinite;
+}
+
+@keyframes blinking-caret {
+  from, to {opacity: 0}
+  50% {opacity: 100%;}
+}
