@@ -18,6 +18,8 @@ jobs:
           node-version: 20
       - name: install node modules
         run: npm install --no-audit
+      - name: Build tailwindcss
+        run: npm run build-css
       - name: Deploy with gh-pages
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
