@@ -16,7 +16,7 @@ code, .code {
     monospace;
 }
 
-typewriter .blinking-caret{
+.typewriter .blinking-caret{
   animation: blinking-caret .75s step-end infinite;
 }
 
