@@ -9,8 +9,12 @@ const Typewriter = () => {
     "Game Developer",
     "Cyber Punk"
   ];
+
   const [buffer, setBuffer] = useState(phrases[0]);
-  const [caretClass, setCaretClass] = useState();
+  const [caretClass, setCaretClass] = useState('blinking-caret');
+  const [direction, setDirection] = useState('erasing');
+  const [prevDirection, setPrevDirection] = useState('erasing');
+  const [currentPhrase, setCurrentPhrase] = useState(0);
 
   // let phraseCounter = 0;
 
@@ -18,39 +22,85 @@ const Typewriter = () => {
   // we'll store a counter, the counter will reset to 0 once it hits the length of the array
   // we'll use the counter to find the next string to rewrite
 
-  const UpdateTypewriter = () => {
+  useEffect(() => {
 
-    if(buffer.length > 0){
+    // main loop - controls the flow to each state (erasing, writing)
 
-      // there's stuff in the buffer, we want to erase it one character at a time
-      setCaretClass('solid-caret');
+    let interval;
 
-      let tempBuffer = buffer;
+    if(direction === 'erasing'){
 
-      while(tempBuffer.length > 0){
-        tempBuffer = tempBuffer.slice(0, tempBuffer.length -1);
-        setBuffer(tempBuffer);
-        setTimeout(200);
-      }
+      setCaretClass('');
+      setPrevDirection('erasing');
 
-      // while(buffer.length > 0){
-        // setBuffer(buffer.slice(0, buffer.length -1));
-        // setTimeout(2000);
-      // }
-      // setCaretClass('blinking-caret');
+      interval = setInterval(() => {
+
+        setBuffer((prevBuffer) => {
+  
+          if(prevBuffer.length === 0){
+  
+            setDirection('pausing');
+            clearInterval(interval);
+            return '';
+          }
+  
+          return prevBuffer.slice(0, -1);
+        });
+      }, 100); // delay 100, todo - make that a prop
     }
 
-    // setCaretClass('blinking-caret');
-  }
+    if(direction === 'writing'){
+      
+      setCaretClass('');
+      setPrevDirection('writing');
 
-  useEffect(() => {
-    const interval = setInterval(
-      UpdateTypewriter,
-      1000,
-    );
+      interval = setInterval(() => {
+
+        setBuffer((prevBuffer) => {
+
+          if(buffer.length >= phrases[currentPhrase].length){
+
+            setDirection('pausing');
+            clearInterval(interval);
+            return buffer;
+          }
+
+          return prevBuffer += phrases[currentPhrase][prevBuffer.length]
+        });
+      }, 100);
+    }
+
+    if(direction === 'pausing'){
+
+      setCaretClass('blinking-caret');
+      
+      interval = setInterval(() => {
+
+        // in the pause state we decide what the next state is
+        if(prevDirection === 'writing'){
+          setDirection('erasing');
+          setPrevDirection('pausing');
+        }else{
+          if(currentPhrase >= phrases.length -1){
+            setCurrentPhrase(0);
+          }else{
+            setCurrentPhrase(currentPhrase +1);
+          }
+          setDirection('writing');
+          setPrevDirection('pausing');
+        }
+
+        clearInterval(interval);
+
+      }, 2000); // delay 2s, todo - make this a 'pause between changes' prop
+    }
+
+    if(interval === null){
+      return;
+    }
 
     return () => clearInterval(interval);
-  });
+  }, [buffer, direction, phrases, currentPhrase, prevDirection]);
 
   return(
     <div className="typewriter mt-3 text-lg leading-relaxed text-subtext1 code">
