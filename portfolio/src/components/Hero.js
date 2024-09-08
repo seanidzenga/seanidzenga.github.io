@@ -3,10 +3,11 @@ import Typewriter from './Typewriter';
 function Hero({ headline }){
 
   const phrases = [
-    "Software Developer",
-    "Disk Jockey",
-    "Game Developer",
-    "Cyber Punk"
+    "Software Developer ",
+    "Client Engineer ",
+    "Team Lead ",
+    "Web Developer ",
+    "Technical Specialist "
   ];
 
   return(
